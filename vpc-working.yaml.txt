@@ -1,0 +1,112 @@
+# Description of what this change includes
+# Revision number
+# Date
+
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  CloudFormation template that creates a VPC named VPC-stebyr0836
+  spanning three Availability Zones in the AWS US-West-2 Region.
+
+Resources:
+
+  # ------------------------------------------------------------
+  # VPC
+  # ------------------------------------------------------------
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: VPC-stebyr0836
+
+  # ------------------------------------------------------------
+  # Subnet 1 - Availability Zone 1
+  # ------------------------------------------------------------
+  Subnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs us-west-2
+      Tags:
+        - Key: Name
+          Value: VPC-stebyr0836-Subnet-1
+
+  # ------------------------------------------------------------
+  # Subnet 2 - Availability Zone 2
+  # ------------------------------------------------------------
+  Subnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs us-west-2
+      Tags:
+        - Key: Name
+          Value: VPC-stebyr0836-Subnet-2
+
+  # ------------------------------------------------------------
+  # Subnet 3 - Availability Zone 3
+  # ------------------------------------------------------------
+  Subnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.3.0/24
+      AvailabilityZone: !Select
+        - 2
+        - !GetAZs us-west-2
+      Tags:
+        - Key: Name
+          Value: VPC-stebyr0836-Subnet-3
+
+Outputs:
+
+  # ------------------------------------------------------------
+  # VPC Information
+  # ------------------------------------------------------------
+  VPCId:
+    Description: ID of the VPC
+    Value: !Ref VPC
+
+  VPCName:
+    Description: Name of the VPC
+    Value: VPC-stebyr0836
+
+  # ------------------------------------------------------------
+  # Availability Zone Information
+  # ------------------------------------------------------------
+  AvailabilityZone1:
+    Description: Availability Zone for Subnet 1
+    Value: !GetAtt Subnet1.AvailabilityZone
+
+  AvailabilityZone2:
+    Description: Availability Zone for Subnet 2
+    Value: !GetAtt Subnet2.AvailabilityZone
+
+  AvailabilityZone3:
+    Description: Availability Zone for Subnet 3
+    Value: !GetAtt Subnet3.AvailabilityZone
+
+  # ------------------------------------------------------------
+  # Subnet Information
+  # ------------------------------------------------------------
+  Subnet1Id:
+    Description: ID of Subnet 1
+    Value: !Ref Subnet1
+
+  Subnet2Id:
+    Description: ID of Subnet 2
+    Value: !Ref Subnet2
+
+  Subnet3Id:
+    Description: ID of Subnet 3
+    Value: !Ref Subnet3
